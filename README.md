@@ -51,4 +51,5 @@ with a `BIRD` routing daemon.
 The various subprojects are described in the respective subdirectories
 below.
 
-Ansible playbooks are 
+Some [Ansible](https://www.ansible.com) playbooks are available to
+ease of deployment of the PoC.
