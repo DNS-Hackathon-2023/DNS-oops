@@ -16,7 +16,7 @@
     chdir: /opt/nsnotifyd
 
 - name: Make notifyd
-  ansible.builtin.shell: make all && make install
+  ansible.builtin.shell: make all && make prefix=/usr/local install
   args:
     chdir: /opt/nsnotifyd
 
