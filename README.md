@@ -53,3 +53,6 @@ below.
 
 Some [Ansible](https://www.ansible.com) playbooks are available to
 ease deployment of the PoC.
+
+**Live Demonstration Screenshot**
+![dns-oops_screenshot](https://github.com/DNS-Hackathon-2023/DNS-oops/assets/73646976/e6fa647a-6923-4b5a-98ff-76545214a2f1)
