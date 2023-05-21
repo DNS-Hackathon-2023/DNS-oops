@@ -26,7 +26,7 @@ different geographic locations using a cloud service. The signalling
 mechanism was used to configure the servers to react to zone updates.
 
 In this PoC, the serial number is used to determine *which* of the
-three servers to deploy. Depending on the serial number, one specific
+three servers to enable. Depending on the serial number, one specific
 will announce the services prefixes and the others will withdraw the
 prefixes.
 
