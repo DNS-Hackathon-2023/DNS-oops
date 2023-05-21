@@ -1,0 +1,251 @@
+\documentclass[Screen16to9,17pt]{foils}
+%\documentclass[16pt,landscape,a4paper,footrule]{foils}
+\usepackage{hackathon-oops-slides}
+
+% SPDX-FileCopyrightText: 2006-2021, Henrik Kramselund <hlk@kramse.org>
+% SPDX-License-Identifier: BSD 3-Clause "New" or "Revised" License
+% This is an example presentation
+
+\begin{document}
+
+%\rm
+\selectlanguage{english}
+
+\mytitlepage
+{DNS OOPS\\\small Notify the BGP daemons}
+
+\LogoOn
+
+\slide{Goals for the project}
+\vskip 2 cm
+
+%{\hlkbig En 3 dages workshop, hvor du lærer at angribe dit netværk!}
+
+\begin{quote}
+
+   This document seeks to specify {\bf a method for name servers} to {\bf signal
+   programs outside} of the {\bf name server software}, and which are not
+   necessarily involved with the DNS protocol, {\bf about conditions} that can
+   arise {\bf within the name server}.  These {\bf signals} can be used to {\bf invoke
+   actions} in areas that {\bf help provide the DNS service}, such as {\bf routing}.
+
+\end{quote}
+
+Main URL:\\
+\url{https://datatracker.ietf.org/doc/draft-grubto-dnsop-dns-out-of-protocol-signalling/}
+\begin{list1}
+\item
+\end{list1}
+
+\slide{The goal}
+
+\hlkimage{14cm}{images/DNS Signalling.drawio.png}
+
+Automated signalling when things happen in the DNS server ...
+
+\slide{Small configuration file}
+
+\begin{minted}[fontsize=\scriptsize]{JSON}
+{
+    "_comment": "Some information should be templated",
+    "node_info": {
+        "IPv4-prefix": "${IPV4_PREFIX}",
+        "IPv4-prefix-length": "${IPV4_PREFIX_LENGTH}",
+        "IPv6-prefix": "${IPV6_PREFIX}",
+        "IPv6-prefix-length": "${IPV6_PREFIX_LENGTH}"
+    },
+    "zones": {
+        "oops.example.com.": {
+            "last-octet": 4,
+            "generate-dsc": true,
+            "generate-pcap": false
+        }
+    }
+}
+\end{minted}
+
+
+\slide{Technologies used }
+
+
+\begin{list2}
+\item DNS server software: Knot DNS, BIND, NSD
+\item BGP software: Bird, ExaBGP
+\item Programming languages: Python 3, Shell scripting
+\item Notification: shell scripting, D-bus to Knot DNS
+\end{list2}
+
+
+
+
+\slide{Example: Use the Libraries}
+
+First Python script uses various features:
+\begin{minted}[fontsize=\small]{python}
+#!/usr/bin/env python3
+
+import sys
+import dbus   // D-bus is implemented in Knot DNS
+import dbus.mainloop.glib
+import signal
+import requests
+import json
+import libknot.control
+from gi.repository import GLib
+
+api_url = None
+node_data_file = '/root/node_data.json'
+zones = {}
+\end{minted}
+
+
+\slide{Example: Event loop and D-bus}
+
+When zone is updated, do something:
+\begin{minted}[fontsize=\small]{python}
+def updated(*args, **kwargs):
+    """
+    Event handler for Glib.MainLoop
+    Also explicitly called at script startup to determine if any event handling needs to be done
+    """
+    (zone, serial) = args
+    print("Zone %s updated, SOA serial %d" % (zone, serial))
+    zones[zone] = serial
+    if None not in zones.values():
+        # Build a list of all zones with serials
+        all_zone_info = ""
+        for key in zones:
+            all_zone_info += f'{key}:{zones[key]};'
+...
+\end{minted}
+
+This is an example, can be run inside/outside of the server, in cloud systems etc.
+
+
+\slide{Improvements and next steps}
+
+
+
+\begin{list2}
+\item Create dockerfiles for packing this in an easy way
+\item Add some bridging between Notify and D-bus
+\item Add D-bus features to NSD
+\end{list2}
+
+
+
+
+\end{document}
+
+\slide{Example preformatted text}
+
+\begin{alltt}
+\footnotesize # {\bfseries tcpdump -i en0 host 10.20.20.129 or host 10.0.0.11}
+tcpdump: listening on en0
+23:23:30.426342 10.0.0.200.33849 > router.33435: udp 12 {\bf [ttl 1]}
+23:23:30.426742 safri > 10.0.0.200: {\bf icmp: time exceeded in-transit}
+23:23:30.436069 10.0.0.200.33849 > router.33436: udp 12 {\bf [ttl 1]}
+23:23:30.436357 safri > 10.0.0.200: {\bf icmp: time exceeded in-transit}
+23:23:30.437117 10.0.0.200.33849 > router.33437: udp 12 {\bf [ttl 1]}
+23:23:30.437383 safri > 10.0.0.200: {\bf icmp: time exceeded in-transit}
+23:23:30.437574 10.0.0.200.33849 > router.33438: udp 12
+23:23:30.438946 router > 10.0.0.200: icmp: router {\bf udp port 33438 unreachable}
+23:23:30.451319 10.0.0.200.33849 > router.33439: udp 12
+23:23:30.452569 router > 10.0.0.200: icmp: router {\bf udp port 33439 unreachable}
+23:23:30.452813 10.0.0.200.33849 > router.33440: udp 12
+23:23:30.454023 router > 10.0.0.200: icmp: router {\bf udp port 33440 unreachable}
+23:23:31.379102 10.0.0.200.49214 > safri.domain:  6646+ PTR?
+200.0.0.10.in-addr.arpa. (41)
+23:23:31.380410 safri.domain > 10.0.0.200.49214:  6646 NXDomain* 0/1/0 (93)
+14 packets received by filter
+0 packets dropped by kernel
+\end{alltt}
+
+
+\slide{Example pictures in slide - TCP three-way handshake}
+
+\hlkimage{5cm}{images/tcp-three-way.pdf}
+
+\begin{list2}
+\item {\bfseries TCP SYN half-open} scans
+\item Tidligere loggede systemer kun når der var etableret en fuld TCP
+  forbindelse\\
+  -- dette kan/kunne udnyttes til \emph{stealth}-scans
+\item Hvis en maskine modtager mange SYN pakker kan dette fylde
+  tabellen over connections op -- og derved afholde nye forbindelser
+  fra at blive oprette -- {\bfseries SYN-flooding}
+\end{list2}
+
+
+
+\slide{Example: Picture and code}
+
+\hlkimage{18cm}{buffer-overflow-1.pdf}
+
+\begin{minted}[fontsize=\small]{C}
+main(int argc, char **argv)
+{      char buf[200];
+        strcpy(buf, argv[1]);
+        printf("%s\textbackslash{}n",buf);
+}
+\end{minted}
+
+
+
+\slide{VXLAN injection}
+
+\hlkimage{19cm}{vxlan-basic-injection.png}
+
+I tested using my pentest server in one AS, sending across an internet exchange into a production network, towards Arista testing devices - no problems, it's just routed layer 3 IP+UDP packets
+
+\slide{Example attacks, What is possible VXLAN Header}
+
+\begin{alltt}\footnotesize
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|R|R|R|R|I|R|R|R|            Reserved                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                VXLAN Network Identifier (VNI) |   Reserved    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+Inner Ethernet Header:
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|             Inner Destination MAC Address                     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Inner Destination MAC Address | Inner Source MAC Address      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                Inner Source MAC Address                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|OptnlEthtype = C-Tag 802.1Q    | Inner.VLAN Tag Information    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+\end{alltt}
+
+\begin{list2}
+\item Above protocol header is copied from RFC text document, and in \verb+alltt+ environment
+\end{list2}
+
+
+
+\slide{Example: Snippets of code with minted Scapy}
+
+First create VXLAN header and inside packet
+\begin{minted}[fontsize=\small]{python}
+vxlanport=4789     # RFC 7384 port 4789, Linux kernel default 8472
+vni=37             # Usually VNI == destination VLAN
+vxlan=Ether(dst=routermac)/IP(src=vtepsrc,dst=vtepdst)/
+   UDP(sport=vxlanport,dport=vxlanport)/VXLAN(vni=vni,flags="Instance")
+broadcastmac="ff:ff:ff:ff:ff:ff"
+randommac="00:51:52:01:02:03"
+attacker="185.27.115.666"
+destination="10.0.0.10"
+# port is the one we want to contact inside the firewall
+insideport=53
+testport=54040
+packet=vxlan/Ether(dst=broadcastmac,src=randommac)/IP(src=attacker,
+    dst=destination)/UDP(sport=testport,dport=insideport)/
+    DNS(rd=1,id=0xdead,qd=DNSQR(qname="www.wikipedia.org"))
+\end{minted}
+
+{\footnotesize Fun fact, Unbound on OpenBSD reply to DNS requests received in Ethernet packets with broadcast destination and IP destination being the IP of the server}
+
+\myquestionspage
+
+\end{document}
