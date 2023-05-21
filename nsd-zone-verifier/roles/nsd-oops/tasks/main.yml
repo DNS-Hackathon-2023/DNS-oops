@@ -1,0 +1,10 @@
+- name: write NSD config
+  ansible.builtin.template:
+    src: nsd.conf.j2
+    dest: /etc/nsd/nsd.conf
+
+- name: write script
+  ansible.builtin.template:
+    src: start-stop-bird.sh.j2
+    dest: /etc/nsd/start-stop-bird.sh
+    mode: "+x"
