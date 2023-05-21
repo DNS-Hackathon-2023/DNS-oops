@@ -1,0 +1,27 @@
+server:
+	ip-address: enp1s0
+	ip-address: lo
+	username: ""
+	database: ""
+	nsid: ascii_nsd-oops
+	verbosity: 2
+
+remote-control:
+	control-enable: yes
+
+verify:
+	enable: yes
+	verify-zones: no
+	verifier-feed-zone: no
+
+zone:
+	name: {{ zone_name }}
+
+	verify-zone: yes
+	verifier: /etc/nsd/start-stop-bird.sh
+
+	allow-notify: 0.0.0.0/0 NOKEY
+	request-xfr: {{ master_ipv4 }} NOKEY
+
+	allow-notify: ::0/0 NOKEY
+	request-xfr: {{ master_ipv6 }} NOKEY

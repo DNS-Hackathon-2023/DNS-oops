@@ -1,0 +1,6 @@
+---
+- name: NSD oops
+  hosts: all
+  become: yes
+  roles:
+    - nsd-oops
