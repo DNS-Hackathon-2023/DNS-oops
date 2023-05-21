@@ -1,4 +1,6 @@
 ---
+# you can set these variables when running the playbook using -e "var=value"
+# should really be host_vars but for this hackathon, this is fine
 announce_ipv4_prefix: ""
 announce_ipv6_prefix: ""
 
