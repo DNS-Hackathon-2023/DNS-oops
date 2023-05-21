@@ -52,4 +52,4 @@ The various subprojects are described in the respective subdirectories
 below.
 
 Some [Ansible](https://www.ansible.com) playbooks are available to
-ease of deployment of the PoC.
+ease deployment of the PoC.
