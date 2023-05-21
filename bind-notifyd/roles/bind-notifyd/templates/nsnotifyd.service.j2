@@ -1,0 +1,15 @@
+[Unit]
+Description=nsnotifyd
+Documentation=https://dotat.at/prog/nsnotifyd/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/nsnotifyd -d -p 7000 -a 127.0.0.1 /usr/local/sbin/handle-routes.sh {{ zone_name }}
+SyslogIdentifier=nsnotifyd
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

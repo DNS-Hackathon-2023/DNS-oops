@@ -1,0 +1,6 @@
+---
+- name: Bind notifyd
+  hosts: all
+  become: yes
+  roles:
+    - bind-notifyd

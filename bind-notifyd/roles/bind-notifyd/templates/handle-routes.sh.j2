@@ -1,9 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-IPV4_PREFIX=""
-IPV6_PREFIX=""
+IPV4_PREFIX="{{ announce_ipv4_prefix }}"
+IPV6_PREFIX="{{ announce_ipv6_prefix }}"
 
-if expr $2 % 3 ; then
+SERIAL="$2"
+
+if expr $SERIAL % 3 ; then
     exabgp-cli withdraw route $IPV6_PREFIX
     exabgp-cli withdraw route $IPV4_PREFIX
     echo withdrawing IPv6 and IPv4 route

@@ -1,0 +1,17 @@
+---
+- name: restart bind9
+  ansible.builtin.service:
+    name: bind9
+    state: restarted
+
+- name: restart exabgp
+  ansible.builtin.service:
+    name: exabgp
+    state: restarted
+
+- name: restart nsnotifyd
+  ansible.builtin.service:
+    name: nsnotifyd
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
