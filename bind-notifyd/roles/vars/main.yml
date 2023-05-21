@@ -1,0 +1,15 @@
+---
+announce_ipv4_prefix: ""
+announce_ipv6_prefix: ""
+
+zone_name: "example.com"
+master_ip: ""
+
+local_ipv4: ""
+local_ipv6: ""
+router_id: ""
+local_as: ""
+peer_as: ""
+md5_password: ""
+neighbor_ipv4: ""
+neighbor_ipv6: ""

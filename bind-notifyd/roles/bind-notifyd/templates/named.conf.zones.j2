@@ -1,0 +1,6 @@
+zone "{{ zone_name }}" {
+    type slave;
+    notify explicit;
+    also-notify port 7000 { 127.0.0.1; };
+    masters { {{ master_ip }}; };
+};

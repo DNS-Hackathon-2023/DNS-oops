@@ -1,0 +1,33 @@
+neighbor {{ neighbor_ipv4 }} {
+	description "Vultr";
+	router-id {{ router_id }};
+	local-address {{ local_ipv4 }};
+	local-as {{ local_as }};
+	peer-as {{ peer_as }};
+	md5-password "{{ md5_password }}";
+	family {
+		ipv4 unicast;
+	}
+	static {
+		route {{ announce_ipv4_prefix }} {
+			next-hop self;
+		}
+	}
+}
+
+neighbor {{ neighbor_ipv6 }} {
+	description "Vultr";
+	router-id {{ router_id}};
+	local-address {{ local_ipv6 }};
+	local-as {{ local_as }};
+	peer-as {{ peer_as }};
+	md5-password "{{ md5_password }}";
+	family {
+		ipv6 unicast;
+	}
+	static {
+		route {{ announce_ipv6_prefix }} {
+			next-hop self;
+		}
+	}
+}

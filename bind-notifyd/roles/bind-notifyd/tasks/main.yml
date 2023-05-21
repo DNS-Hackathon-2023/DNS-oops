@@ -1,0 +1,45 @@
+- name: Install packages bind9 and git
+  ansible.builtin.apt:
+    pkg:
+      - bind9
+      - git
+      - exabgp
+
+- name: Clone notifyd
+  ansible.builtin.git:
+    repo: https://github.com/fanf2/nsnotifyd.git
+    dest: /opt/nsnotifyd
+
+- name: Configure notifyd
+  ansible.builtin.shell: ./configure
+  args:
+    chdir: /opt/nsnotifyd
+
+- name: Make notifyd
+  ansible.builtin.shell: make all && make install
+  args:
+    chdir: /opt/nsnotifyd
+
+- name: Write handle-routes.sh config
+  ansible.builtin.template:
+    src: handle-routes.sh.j2
+    dest: /usr/local/sbin/handle-routes.sh
+    mode: "+x"
+
+- name: Write /etc/bind/named.conf
+  ansible.builtin.template:
+    src: named.conf.j2
+    dest: /etc/bind/named.conf
+  notify: restart bind9
+
+- name: Write /etc/bind/named.conf.zones
+  ansible.builtin.template:
+    src: named.conf.zones.j2
+    dest: /etc/bind/named.conf.zones
+  notify: restart bind9
+
+- name: Write exabgp config
+  ansible.builtin.template:
+    src: exabgp.conf.j2
+    dest: /etc/exabgp/exabgp.conf
+  notify: restart exabgp
