@@ -1,0 +1,14 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	oops.example.com. root.localhost. (
+			     38		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns01.example.com.
+@	IN	A	198.51.100.53
+@	IN	AAAA	2001:db8:1::53

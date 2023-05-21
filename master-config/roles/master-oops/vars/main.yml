@@ -1,0 +1,5 @@
+---
+# you can set these variables when running the playbook using -e "var=value"
+# should really be host_vars but for this hackathon, this is fine
+zone_name: ""
+also_notify: ""

@@ -1,0 +1,6 @@
+---
+- name: Master oops
+  hosts: all
+  become: yes
+  roles:
+    - master-oops

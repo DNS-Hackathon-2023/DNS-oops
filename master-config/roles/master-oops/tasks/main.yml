@@ -1,0 +1,23 @@
+---
+- name: install bind9
+  ansible.builtin.apt:
+    name: bind9
+    state: present
+
+- name: write /etc/bind/named.conf.local
+  ansible.builtin.template:
+    src: named.conf.local.j2
+    dest: /etc/bind/named.conf.local
+  notify: restart bind9
+
+- name: check if file exists
+  ansible.builtin.stat:
+    path: "/etc/bind/{{ zone_name }}.zone"
+  register: zone_file
+
+- name: write initial zonefile if it does not exist
+  ansible.builtin.copy:
+    src: "{{ zone_name }}.zone"
+    dest: "/etc/bind/{{ zone_name }}.zone"
+  when: zone_file.stat.exists == False
+  notify: restart bind9
