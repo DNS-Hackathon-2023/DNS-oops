@@ -6,7 +6,7 @@ external actions when a zone it serves is updated.
 The server uses named (BIND) and acts as secondary for the zone
 `oops.krause.nl`, and the trigger for the external action is a zone
 update. Named is configured to send a DNS NOTIFY message to a local
-[https://dotat.at/prog/nsnotifyd/](nsnotifyd). daemon. Notifyd will
+[nsnotifyd](https://dotat.at/prog/nsnotifyd/). daemon. Notifyd will
 react to the NOTIFY message and fork the program specified, giving it
 the name of the zone, the new serial number, and the IP address of the
 server from which it recieved the notify message as command line
