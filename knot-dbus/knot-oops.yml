@@ -1,0 +1,6 @@
+---
+- name: Knot OOPS
+  hosts: all
+  become: yes
+  roles:
+    - knot-oops

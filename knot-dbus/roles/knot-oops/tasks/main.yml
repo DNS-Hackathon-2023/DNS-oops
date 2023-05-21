@@ -1,0 +1,16 @@
+---
+- name: copy /root/notify_zones_updated.py file
+  copy:
+    src: notify_zones_updated.py
+    dest: /root/notify_zones_updated.py
+
+- name: write node_data.json
+  template:
+    src: node_data.json.j2
+    dest: /root/node_data.json
+
+- name: write systemd unit file
+  template:
+    src: notify_zones_updated.service.j2
+    dest: /etc/systemd/system/notify_zones_updated.service
+  notify: restart notify_zones_updated
