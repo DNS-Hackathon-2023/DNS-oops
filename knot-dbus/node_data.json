@@ -1,0 +1,9 @@
+{
+    "_comment": "This file could be used to store more information",
+    "zones": {
+        "oops.example.com.": {
+            "last-octet": 4,
+            "generate-dsc": true
+        }
+    }
+}

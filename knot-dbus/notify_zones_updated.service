@@ -1,0 +1,14 @@
+[Unit]
+Description=Notify a process about zone updates
+Wants=knot.service
+After=knot.service
+
+[Service]
+#Type=simple
+#User=root
+#Group=root
+ExecStart=/root/notify_zones_updated.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
