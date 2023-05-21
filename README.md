@@ -3,7 +3,7 @@
 The **DNS Out-Of-Protocol Signalling** (DNS oops) project had two
 goals:
 
-1. To implment server even signalling described in
+1. To implement server signalling described in
    [dns-oops](https://datatracker.ietf.org/doc/draft-grubto-dnsop-dns-out-of-protocol-signalling/)
    in [nsd](https://www.nlnetlabs.nl/projects/nsd/), and
 
@@ -36,17 +36,19 @@ servers, the serial number is first divided by 3. If the remainder is
 0, then one server A will engage. If the remainder is 1, then server B
 will engage, and if the remainder is 2, then server C will engage.
 
-**Server A** was fit with a regular unmodified `BIND` (named) DNS
+**Server A** was fitted with a regular unmodified `BIND` (named) DNS
 server configured to send DNS NOTIFY messages to a `nsnotifyd` daemon,
 which in turn interacted with an `exabgp` BGP routing daemon. This was
 merely to highlight that unmodified software can interact with the
 modified software.
 
-**Server B** was fit with a `KnotDNS` DNS server interacting with a
+**Server B** was fitted with a `KnotDNS` DNS server interacting with a
 `BIRD` routing daemon.
 
-**Server C** was fit with a doctored `nsd` DNS server interacting with
-a `BIRD` routing daemon.
+**Server C** was fitted with a doctored `nsd` DNS server interacting
+with a `BIRD` routing daemon.
 
 The various subprojects are described in the respective subdirectories
 below.
+
+Ansible playbooks are 
