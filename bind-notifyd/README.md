@@ -6,10 +6,11 @@ external actions when a zone it serves is updated.
 The server uses named (BIND) and acts as secondary for the zone
 `oops.krause.nl`, and the trigger for the external action is a zone
 update. Named is configured to send a DNS NOTIFY message to a local
-`notifyd`† daemon. Notifyd will react to the NOTIFY message and fork
-the program specified, giving it the name of the zone, the new serial
-number, and the IP address of the server from which it recieved the
-notify message as command line arguments.
+[https://dotat.at/prog/nsnotifyd/](nsnotifyd). daemon. Notifyd will
+react to the NOTIFY message and fork the program specified, giving it
+the name of the zone, the new serial number, and the IP address of the
+server from which it recieved the notify message as command line
+arguments.
 
 As a proof of concept, a script was created that announces and
 withdraws a service address. For demonstration purposes, the serial
@@ -22,5 +23,3 @@ server will withdraw its service address.
 The script interacts with `exabgp` through its CLI componend
 `exabgp-cli`, which is used to manipulate the BGP routing information
 base.
-
-† [https://dotat.at/prog/nsnotifyd/](https://dotat.at/prog/nsnotifyd/).
