@@ -43,3 +43,9 @@
     src: exabgp.conf.j2
     dest: /etc/exabgp/exabgp.conf
   notify: restart exabgp
+
+- name: write systemd unit file
+  ansible.builtin.template:
+    src: nsnotifyd.service.j2
+    dest: /etc/systemd/system/nsnotifyd.service
+  notify: restart nsnotifyd

@@ -8,3 +8,10 @@
   ansible.builtin.service:
     name: exabgp
     state: restarted
+
+- name: restart nsnotifyd
+  ansible.builtin.service:
+    name: nsnotifyd
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
